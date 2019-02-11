@@ -1,9 +1,11 @@
 package com.renate.shop.service.query;
 
 import com.renate.shop.model.Customer;
+import org.springframework.data.domain.Page;
 
 public interface CustomerQuery {
 
-	Customer createCustomer(Customer customer);
+	Page<Customer> getCustomers(Integer page, Integer size);
+	Customer getCustomer(Long customerId);
 
 }
