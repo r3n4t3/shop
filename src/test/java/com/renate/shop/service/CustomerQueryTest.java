@@ -1,7 +1,6 @@
 package com.renate.shop.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
@@ -69,6 +68,12 @@ public class CustomerQueryTest {
 
 	@Test(expected = BadRequestException.class)
 	public void getCustomersWithInValidPageParams_throwsBadRequestException() {
+		List<Customer> customers = new ArrayList<>();
+		customers.add(CustomerGenerator.generateCustomer());
+		customers.add(CustomerGenerator.generateCustomer());
+		given(this.customerRepository.findAll(PageRequest.of(0,10)))
+				.willReturn(new PageImpl<>(customers));
+
 		this.customerQuery.getCustomers(-1, null);
 	}
 
