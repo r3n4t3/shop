@@ -1,6 +1,7 @@
 package com.renate.shop.service.command.implementation;
 
-import com.renate.shop.exception.BadRequestException;
+import com.renate.shop.exception.ConflictException;
+import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.model.Customer;
 import com.renate.shop.repository.CustomerRepository;
 import com.renate.shop.service.command.CustomerCommand;
@@ -18,7 +19,7 @@ public class CustomerCommandImplementation implements CustomerCommand {
 		if (this.customerRepository.findByTelephone(customer.getTelephone()) == null) {
 			return this.customerRepository.save(customer);
 		}
-		throw BadRequestException.create("A customer exist with the give telephone");
+		throw ConflictException.create("A customer exist with the give telephone");
 	}
 
 	@Override
@@ -26,6 +27,6 @@ public class CustomerCommandImplementation implements CustomerCommand {
 		if (this.customerRepository.getOne(customer.getId()) != null) {
 			return this.customerRepository.save(customer);
 		}
-		throw BadRequestException.create("Customer account does not exist");
+		throw NotFoundException.create("Customer account does not exist");
 	}
 }

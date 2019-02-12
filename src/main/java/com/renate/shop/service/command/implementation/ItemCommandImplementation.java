@@ -1,6 +1,7 @@
 package com.renate.shop.service.command.implementation;
 
-import com.renate.shop.exception.BadRequestException;
+import com.renate.shop.exception.ConflictException;
+import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.model.Item;
 import com.renate.shop.repository.ItemRepository;
 import com.renate.shop.service.command.ItemCommand;
@@ -18,7 +19,7 @@ public class ItemCommandImplementation implements ItemCommand {
 		if (this.itemRepository.findByName(item.getName()) == null) {
 			return this.itemRepository.save(item);
 		}
-		throw BadRequestException.create("Bad Request: Item {0} exist", item.getName());
+		throw ConflictException.create("Bad Request: Item {0} exist", item.getName());
 	}
 
 	@Override
@@ -26,7 +27,7 @@ public class ItemCommandImplementation implements ItemCommand {
 		if (this.itemRepository.getOne(item.getId()) != null) {
 			return this.itemRepository.save(item);
 		}
-		throw BadRequestException.create("Bad Request: Item does not exist");
+		throw NotFoundException.create("Bad Request: Item does not exist");
 	}
 
 	@Override

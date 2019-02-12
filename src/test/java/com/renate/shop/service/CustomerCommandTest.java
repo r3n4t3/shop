@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.renate.shop.exception.BadRequestException;
+import com.renate.shop.exception.ConflictException;
+import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.generator.CustomerGenerator;
 import com.renate.shop.model.Customer;
 import com.renate.shop.repository.CustomerRepository;
@@ -45,8 +46,8 @@ public class CustomerCommandTest {
 		assertThat(newCustomer).isEqualTo(customer);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void createCustomerWithExistingTelephone_throwsBadRequestException() {
+	@Test(expected = ConflictException.class)
+	public void createCustomerWithExistingTelephone_throwsConflictRequestException() {
 		Customer customer = CustomerGenerator.generateCustomer();
 		Customer existingCustomer = CustomerGenerator.generateCustomer();
 		existingCustomer.setTelephone(customer.getTelephone());
@@ -67,8 +68,8 @@ public class CustomerCommandTest {
 		assertThat(updatedCustomer).isEqualTo(customer);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void updateCustomerWithNonExistingAccount_throwsBadRequestException() {
+	@Test(expected = NotFoundException.class)
+	public void updateCustomerWithNonExistingAccount_throwsNotFoundRequestException() {
 		Customer customer = CustomerGenerator.generateCustomer();
 		given(this.customerRepository.getOne(customer.getId())).willReturn(null);
 

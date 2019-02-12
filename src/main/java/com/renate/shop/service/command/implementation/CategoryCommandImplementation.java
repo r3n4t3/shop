@@ -1,6 +1,8 @@
 package com.renate.shop.service.command.implementation;
 
 import com.renate.shop.exception.BadRequestException;
+import com.renate.shop.exception.ConflictException;
+import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.model.Category;
 import com.renate.shop.repository.CategoryRepository;
 import com.renate.shop.service.command.CategoryCommand;
@@ -18,7 +20,7 @@ public class CategoryCommandImplementation implements CategoryCommand {
 		if (this.categoryRepository.findByName(category.getName()) == null) {
 			return this.categoryRepository.save(category);
 		}
-		throw BadRequestException.create("Category exist");
+		throw ConflictException.create("Category exist");
 	}
 
 	@Override
@@ -26,6 +28,6 @@ public class CategoryCommandImplementation implements CategoryCommand {
 		if (this.categoryRepository.getOne(category.getId()) != null) {
 			return this.categoryRepository.save(category);
 		}
-		throw BadRequestException.create("Category does not exist");
+		throw NotFoundException.create("Category does not exist");
 	}
 }

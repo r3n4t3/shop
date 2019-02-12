@@ -3,7 +3,8 @@ package com.renate.shop.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.renate.shop.exception.BadRequestException;
+import com.renate.shop.exception.ConflictException;
+import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.generator.ItemGenerator;
 import com.renate.shop.model.Item;
 import com.renate.shop.repository.ItemRepository;
@@ -44,8 +45,8 @@ public class ItemCommandTest {
 		assertThat(newItem).isEqualTo(item);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void createItemWithExistingName_throwsBadRequestException() {
+	@Test(expected = ConflictException.class)
+	public void createItemWithExistingName_throwsConflictRequestException() {
 		Item item = ItemGenerator.generateItem();
 		Item existingItem = ItemGenerator.generateItem();
 		existingItem.setName(item.getName());
@@ -65,8 +66,8 @@ public class ItemCommandTest {
 		assertThat(updatedItem).isEqualTo(item);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void updateNonExistingItem_throwsBadRequestException() {
+	@Test(expected = NotFoundException.class)
+	public void updateNonExistingItem_throwsNotFoundRequestException() {
 		Item item = ItemGenerator.generateItem();
 		given(this.itemRepository.getOne(item.getId())).willReturn(null);
 

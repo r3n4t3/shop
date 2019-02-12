@@ -3,7 +3,8 @@ package com.renate.shop.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.renate.shop.exception.BadRequestException;
+import com.renate.shop.exception.ConflictException;
+import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.generator.CategoryGenerator;
 import com.renate.shop.model.Category;
 import com.renate.shop.repository.CategoryRepository;
@@ -44,8 +45,8 @@ public class CategoryCommandTest {
 		assertThat(newCategory).isEqualTo(category);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void createCategoryWithExistingName_throwsBadRequestException() {
+	@Test(expected = ConflictException.class)
+	public void createCategoryWithExistingName_throwsConflictException() {
 		Category category = CategoryGenerator.generateCategory();
 		Category existingCategory = CategoryGenerator.generateCategory();
 		existingCategory.setName(category.getName());
@@ -66,8 +67,8 @@ public class CategoryCommandTest {
 		assertThat(updatedCategory).isEqualTo(category);
 	}
 
-	@Test(expected = BadRequestException.class)
-	public void updateCategoryWithNonExistingCategory_throwsBadRequestException() {
+	@Test(expected = NotFoundException.class)
+	public void updateCategoryWithNonExistingCategory_throwsNotFoundException() {
 		Category category = CategoryGenerator.generateCategory();
 		given(this.categoryRepository.getOne(category.getId())).willReturn(null);
 		given(this.categoryRepository.save(category)).willReturn(category);
