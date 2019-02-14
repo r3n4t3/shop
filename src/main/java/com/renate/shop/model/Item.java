@@ -6,7 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 public class Item {
@@ -22,9 +24,11 @@ public class Item {
 	@NotNull
 	private Float price;
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn(name = "category_id", referencedColumnName = "id")
 	private Category category;
+	@OneToMany(mappedBy = "item")
+	private Set<Transaction> transactions;
 
 	public Item() {
 	}
