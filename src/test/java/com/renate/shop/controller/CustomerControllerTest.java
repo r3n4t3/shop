@@ -72,7 +72,7 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void updateNonExistingCustomerRequest_returnsHTTP404() throws Exception {
+	public void updateCustomerRequestWithMisMatchId_returnsHTTP404() throws Exception {
 		Customer customer = CustomerGenerator.generateCustomer();
 		Long newId = new Random().nextLong();
 		given(this.customerCommand.updateCustomer(any(Customer.class))).willReturn(customer);
@@ -85,7 +85,7 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void getCustomersWithPageParams_returnsHTTP200AndAPageOfCustomers() throws Exception {
+	public void getCustomersRequestWithPageParams_returnsHTTP200AndAPageOfCustomers() throws Exception {
 		List<Customer> customers = new ArrayList<>();
 		customers.add(CustomerGenerator.generateCustomer());
 		customers.add(CustomerGenerator.generateCustomer());
@@ -96,11 +96,11 @@ public class CustomerControllerTest {
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("content").isArray())
-			.andExpect(jsonPath("numberOfElements").value(2));
+			.andExpect(jsonPath("number").value(0));
 	}
 
 	@Test
-	public void getCustomersWithNoPageParams_returnsHTTP200AndAPageOfCustomers() throws Exception {
+	public void getCustomersRequestWithNoPageParams_returnsHTTP200AndAPageOfCustomers() throws Exception {
 		List<Customer> customers = new ArrayList<>();
 		customers.add(CustomerGenerator.generateCustomer());
 		customers.add(CustomerGenerator.generateCustomer());
@@ -115,7 +115,7 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void getCustomer_returnsHTTP200AndACustomer() throws Exception {
+	public void getCustomerRequest_returnsHTTP200AndACustomer() throws Exception {
 		Customer customer = CustomerGenerator.generateCustomer();
 		given(this.customerQuery.getCustomer(customer.getId())).willReturn(customer);
 
@@ -127,7 +127,7 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void getNonExistingCustomer_returnsHTTP404() throws Exception {
+	public void getNonExistingCustomerRequest_returnsHTTP404() throws Exception {
 		Long customerId = new Random().nextLong();
 		given(this.customerQuery.getCustomer(customerId)).willReturn(null);
 
