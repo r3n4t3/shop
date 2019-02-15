@@ -48,8 +48,8 @@ public class CategoryControllerTest {
 				.content(JSONConvertor.toJSON(category))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("name").value(category.getName()));
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("name").value(category.getName()));
 	}
 
 	@Test
@@ -61,21 +61,21 @@ public class CategoryControllerTest {
 				.content(JSONConvertor.toJSON(category))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("name").value(category.getName()));
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("name").value(category.getName()));
 	}
 
 	@Test
 	public void updateCategoryRequestWithMisMatchId_returnsHTTP404() throws Exception {
 		Category category = CategoryGenerator.generateCategory();
-		Long newId = new Random().nextLong();
+		Long diffCategoryId = new Random().nextLong();
 		given(this.categoryCommand.updateCategory(any(Category.class))).willReturn(category);
 
-		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/categories/" + newId)
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/categories/" + diffCategoryId)
 				.content(JSONConvertor.toJSON(category))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -103,9 +103,9 @@ public class CategoryControllerTest {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories")
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("content").isArray())
-				.andExpect(jsonPath("number").value(0));
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("content").isArray())
+			.andExpect(jsonPath("number").value(0));
 	}
 
 	@Test
@@ -126,6 +126,6 @@ public class CategoryControllerTest {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/"+categoryId)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound());
 	}
 }

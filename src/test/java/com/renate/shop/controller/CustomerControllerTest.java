@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.renate.shop.controller.CustomerController;
 import com.renate.shop.generator.CustomerGenerator;
 import com.renate.shop.generator.JSONConvertor;
 import com.renate.shop.model.Customer;
@@ -74,14 +73,14 @@ public class CustomerControllerTest {
 	@Test
 	public void updateCustomerRequestWithMisMatchId_returnsHTTP404() throws Exception {
 		Customer customer = CustomerGenerator.generateCustomer();
-		Long newId = new Random().nextLong();
+		Long diffCustomerId = new Random().nextLong();
 		given(this.customerCommand.updateCustomer(any(Customer.class))).willReturn(customer);
 
-		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customers/" + newId)
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customers/" + diffCustomerId)
 				.content(JSONConvertor.toJSON(customer))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -109,9 +108,9 @@ public class CustomerControllerTest {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers")
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("content").isArray())
-				.andExpect(jsonPath("numberOfElements").value(2));
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("content").isArray())
+			.andExpect(jsonPath("numberOfElements").value(2));
 	}
 
 	@Test
@@ -121,9 +120,9 @@ public class CustomerControllerTest {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/" + customer.getId())
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("id").value(customer.getId()))
-				.andExpect(jsonPath("telephone").value(customer.getTelephone()));
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").value(customer.getId()))
+			.andExpect(jsonPath("telephone").value(customer.getTelephone()));
 	}
 
 	@Test
@@ -133,6 +132,6 @@ public class CustomerControllerTest {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/" + customerId)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound());
 	}
 }
