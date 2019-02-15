@@ -66,7 +66,7 @@ public class ItemControllerTest {
 	}
 
 	@Test
-	public void updateItemRequestWithMisMatchId_returnsHTTP404() throws Exception {
+	public void updateItemRequestWithMisMatchId_returnsHTTP400() throws Exception {
 		Item item = ItemGenerator.generateItem();
 		Long diffItemId = new Random().nextLong();
 		given(this.itemCommand.updateItem(any(Item.class))).willReturn(item);
@@ -75,7 +75,7 @@ public class ItemControllerTest {
 				.content(JSONConvertor.toJSON(item))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test

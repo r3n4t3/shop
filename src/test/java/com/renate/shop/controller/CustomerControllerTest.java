@@ -71,7 +71,7 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void updateCustomerRequestWithMisMatchId_returnsHTTP404() throws Exception {
+	public void updateCustomerRequestWithMisMatchId_returnsHTTP400() throws Exception {
 		Customer customer = CustomerGenerator.generateCustomer();
 		Long diffCustomerId = new Random().nextLong();
 		given(this.customerCommand.updateCustomer(any(Customer.class))).willReturn(customer);
@@ -80,7 +80,7 @@ public class CustomerControllerTest {
 				.content(JSONConvertor.toJSON(customer))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test

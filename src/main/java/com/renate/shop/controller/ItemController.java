@@ -46,7 +46,7 @@ public class ItemController {
 			Item updatedItem = this.itemCommand.updateItem(item);
 			return new ResponseEntity<>(updatedItem, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@GetMapping(

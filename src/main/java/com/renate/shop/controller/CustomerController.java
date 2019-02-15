@@ -47,7 +47,7 @@ public class CustomerController {
 			Customer updatedCustomer = this.customerCommand.updateCustomer(customer);
 			return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@GetMapping(

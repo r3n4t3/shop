@@ -47,7 +47,7 @@ public class CategoryController {
 			Category updatedCategory = this.categoryCommand.updateCategory(category);
 			return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@GetMapping(

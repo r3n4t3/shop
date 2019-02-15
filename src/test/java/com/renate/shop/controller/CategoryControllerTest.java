@@ -66,7 +66,7 @@ public class CategoryControllerTest {
 	}
 
 	@Test
-	public void updateCategoryRequestWithMisMatchId_returnsHTTP404() throws Exception {
+	public void updateCategoryRequestWithMisMatchId_returnsHTTP400() throws Exception {
 		Category category = CategoryGenerator.generateCategory();
 		Long diffCategoryId = new Random().nextLong();
 		given(this.categoryCommand.updateCategory(any(Category.class))).willReturn(category);
@@ -75,7 +75,7 @@ public class CategoryControllerTest {
 				.content(JSONConvertor.toJSON(category))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
