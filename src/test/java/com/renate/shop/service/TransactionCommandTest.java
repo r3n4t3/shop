@@ -50,6 +50,7 @@ public class TransactionCommandTest {
 	@Test
 	public void updateTransaction_returnsUpdatedTransaction() {
 		Transaction transaction = TransactionGenerator.generateTransaction();
+		given(this.transactionRepository.getOne(transaction.getId())).willReturn(transaction);
 		given(this.transactionRepository.save(transaction)).willReturn(transaction);
 
 		Transaction updatedTransaction = this.transactionCommand.updateTransaction(transaction);
