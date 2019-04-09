@@ -1,6 +1,7 @@
 package com.renate.shop.service.query.implementation;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.renate.shop.model.User;
 import com.renate.shop.repository.UserRepository;
@@ -24,7 +25,12 @@ public class  UserQueryImplementation implements UserQuery {
 	}
 
 	@Override
-	public User getUser(Long userId) {
-		return this.userRepository.getOne(userId);
+	public Optional<User> getUser(Long userId) {
+		return this.userRepository.findById(userId);
+	}
+
+	@Override
+	public User getUser(String username) {
+		return this.userRepository.findByUsername(username);
 	}
 }

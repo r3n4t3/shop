@@ -1,5 +1,7 @@
 package com.renate.shop.controller;
 
+import java.util.Optional;
+
 import com.renate.shop.model.Customer;
 import com.renate.shop.service.command.CustomerCommand;
 import com.renate.shop.service.query.CustomerQuery;
@@ -64,9 +66,9 @@ public class CustomerController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Customer> getCustomer(@PathVariable("customerId") Long id) {
-		Customer customer = this.customerQuery.getCustomer(id);
-		if (customer != null) {
-			return new ResponseEntity<>(customer, HttpStatus.OK);
+		Optional<Customer> customer = this.customerQuery.getCustomer(id);
+		if (customer.isPresent()) {
+			return new ResponseEntity<>(customer.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}

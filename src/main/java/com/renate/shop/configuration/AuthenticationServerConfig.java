@@ -56,7 +56,7 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
 		clientConfigurer
 				.inMemory()
 				.withClient(clientId)
-				.secret(clientSecret)
+				.secret("{noop}" + clientSecret)
 				.authorizedGrantTypes("password", "refresh_token")
 				.authorities("ROLE_TRUSTED_CLIENT")
 				.scopes("read", "write")

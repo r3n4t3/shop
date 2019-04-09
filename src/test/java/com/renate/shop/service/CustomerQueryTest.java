@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.renate.shop.exception.BadRequestException;
 import com.renate.shop.generator.CustomerGenerator;
@@ -80,11 +81,12 @@ public class CustomerQueryTest {
 	@Test
 	public void getCustomer_returnsExistingCustomer() {
 		Customer customer = CustomerGenerator.generateCustomer();
-		given(this.customerRepository.getOne(customer.getId())).willReturn(customer);
+		given(this.customerRepository.findById(customer.getId()))
+				.willReturn(Optional.of(customer));
 
-		Customer gottenCustomer = this.customerQuery.getCustomer(customer.getId());
+		Optional<Customer> gottenCustomer = this.customerQuery.getCustomer(customer.getId());
 
-		assertThat(gottenCustomer).isEqualTo(customer);
+		assertThat(gottenCustomer.get()).isEqualTo(customer);
 	}
 
 	@Test
@@ -92,8 +94,8 @@ public class CustomerQueryTest {
 		Customer customer = CustomerGenerator.generateCustomer();
 		given(this.customerRepository.getOne(customer.getId())).willReturn(null);
 
-		Customer gottenCustomer = this.customerQuery.getCustomer(customer.getId());
+		Optional<Customer> gottenCustomer = this.customerQuery.getCustomer(customer.getId());
 
-		assertThat(gottenCustomer).isEqualTo(null);
+		assertThat(gottenCustomer.isPresent()).isEqualTo(false);
 	}
 }

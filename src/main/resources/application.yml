@@ -3,12 +3,21 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: mysql
-    url: jdbc:mysql://localhost:3306/shop?autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/shop?autoReconnect=true&useSSL=false&serverTimezone=UTC
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+
+
 security:
   oauth2:
     client:
-      client-id: admin
+      client-id: default
       client-secret: secret
       refresh-token-validity-seconds: 86400
       access-token-validity-seconds: 3600
+    resource:
+      id: rsever
 

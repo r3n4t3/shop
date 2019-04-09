@@ -1,5 +1,7 @@
 package com.renate.shop.controller;
 
+import java.util.Optional;
+
 import com.renate.shop.model.Category;
 import com.renate.shop.model.Customer;
 import com.renate.shop.service.command.CategoryCommand;
@@ -64,10 +66,10 @@ public class CategoryController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Category> getCategories(@PathVariable("categoryId") Long id) {
-		Category category = this.categoryQuery.getCategory(id);
-		if(category == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		Optional<Category> category = this.categoryQuery.getCategory(id);
+		if(category.isPresent()) {
+			return new ResponseEntity<>(category.get(), HttpStatus.OK);
 		}
-		return new ResponseEntity<>(category, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

@@ -1,6 +1,7 @@
 package com.renate.shop.service.query.implementation;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.renate.shop.model.Item;
 import com.renate.shop.repository.ItemRepository;
@@ -24,7 +25,7 @@ public class ItemQueryImplementation implements ItemQuery {
 	}
 
 	@Override
-	public Item getItem(Long id) {
-		return this.itemRepository.getOne(id);
+	public Optional<Item> getItem(Long id) {
+		return this.itemRepository.findById(id);
 	}
 }

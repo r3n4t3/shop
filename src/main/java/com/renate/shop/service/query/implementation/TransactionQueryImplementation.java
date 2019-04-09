@@ -1,6 +1,7 @@
 package com.renate.shop.service.query.implementation;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.renate.shop.model.Transaction;
 import com.renate.shop.repository.TransactionRepository;
@@ -24,7 +25,7 @@ public class TransactionQueryImplementation implements TransactionQuery {
 	}
 
 	@Override
-	public Transaction getTransaction(Long transactionId) {
-		return this.transactionRepository.getOne(transactionId);
+	public Optional<Transaction> getTransaction(Long transactionId) {
+		return this.transactionRepository.findById(transactionId);
 	}
 }

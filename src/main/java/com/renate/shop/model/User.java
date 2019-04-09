@@ -17,8 +17,8 @@ public class User {
 	private String firstName;
 	@NotNull
 	private String lastName;
-	@NotNull
 	private String telephone;
+	@Column(unique = true)
 	private String email;
 	@NotNull
 	@Column(unique = true, nullable = false)
@@ -27,7 +27,6 @@ public class User {
 	private String password;
 	@NotNull
 	private Boolean enabled;
-	@NotNull
 	private Date created;
 
 	public User() {

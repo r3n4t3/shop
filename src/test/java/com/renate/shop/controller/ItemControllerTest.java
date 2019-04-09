@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import com.renate.shop.generator.ItemGenerator;
@@ -111,7 +112,8 @@ public class ItemControllerTest {
 	@Test
 	public void getItemRequest_returnsHTTP200AndAnExistingItem() throws Exception {
 		Item item = ItemGenerator.generateItem();
-		given(this.itemQuery.getItem(item.getId())).willReturn(item);
+		given(this.itemQuery.getItem(item.getId()))
+				.willReturn(Optional.of(item));
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/items/" + item.getId())
 				.accept(MediaType.APPLICATION_JSON_VALUE))
@@ -122,7 +124,7 @@ public class ItemControllerTest {
 	@Test
 	public void getNonExistingItemRequest_returnsHTTP404() throws Exception {
 		Long itemId = ItemGenerator.generateItem().getId();
-		given(this.itemQuery.getItem(itemId)).willReturn(null);
+		given(this.itemQuery.getItem(itemId)).willReturn(Optional.empty());
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/items/" + itemId)
 				.accept(MediaType.APPLICATION_JSON_VALUE))

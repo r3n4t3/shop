@@ -2,9 +2,9 @@ package com.renate.shop.controller;
 
 import java.util.Optional;
 
-import com.renate.shop.model.Item;
-import com.renate.shop.service.command.ItemCommand;
-import com.renate.shop.service.query.ItemQuery;
+import com.renate.shop.model.User;
+import com.renate.shop.service.command.UserCommand;
+import com.renate.shop.service.query.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,33 +20,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/items")
-public class ItemController {
+@RequestMapping("/api/v1/users")
+public class UserController {
 
 	@Autowired
-	private ItemCommand itemCommand;
+	private UserCommand userCommand;
 
 	@Autowired
-	private ItemQuery itemQuery;
+	private UserQuery userQuery;
 
 	@PostMapping(
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Item> createItem(@RequestBody Item item) {
-		Item createdItem = this.itemCommand.createItem(item);
-		return new ResponseEntity<>(createdItem, HttpStatus.CREATED);
+	public ResponseEntity<User> createUser(@RequestBody User user) {
+		User newUser = this.userCommand.createUser(user);
+		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 	}
 
 	@PutMapping(
-			value = "/{itemId}",
+			value = "/{userId}",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Item> updateItem(@RequestBody Item item, @PathVariable("itemId") Long id) {
-		if (id.compareTo(item.getId()) == 0) {
-			Item updatedItem = this.itemCommand.updateItem(item);
-			return new ResponseEntity<>(updatedItem, HttpStatus.OK);
+	public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("userId") Long userId) {
+		if (user.getId().compareTo(userId) == 0) {
+			User updatedUser = this.userCommand.updateUser(user);
+			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
@@ -54,20 +54,20 @@ public class ItemController {
 	@GetMapping(
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Page<Item>> getItems(@RequestParam(value = "page", required = false)Integer page,
-			@RequestParam(value = "size", required = false)Integer size) {
-		Page<Item> items = this.itemQuery.getItems(page, size);
-		return new ResponseEntity<>(items, HttpStatus.OK);
+	public ResponseEntity<Page<User>> getUsers(@RequestParam(value = "size", required = false)Integer size,
+			@RequestParam(value = "page", required = false)Integer page ) {
+		Page<User> users = this.userQuery.getUsers(page, size);
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@GetMapping(
-			value = "/{itemId}",
+			value = "/{userId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Item> getItem(@PathVariable("itemId")Long id) {
-		Optional<Item> item = this.itemQuery.getItem(id);
-		if (item.isPresent()) {
-			return new ResponseEntity<>(item.get(), HttpStatus.OK);
+	public ResponseEntity<User> getUser(@PathVariable("userId") Long userId) {
+		Optional<User> user = this.userQuery.getUser(userId);
+		if (user.isPresent()) {
+			return new ResponseEntity<>(user.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}

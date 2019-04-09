@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import com.renate.shop.generator.CategoryGenerator;
@@ -87,7 +88,7 @@ public class CategoryControllerTest {
 		given(this.categoryQuery.getCategories(0, 2)).willReturn(pagedCategories);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories?page=0&size=2")
-				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("content").isArray())
 			.andExpect(jsonPath("number").value(0));
@@ -102,7 +103,7 @@ public class CategoryControllerTest {
 		given(this.categoryQuery.getCategories(null, null)).willReturn(pagedCategories);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories")
-				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("content").isArray())
 			.andExpect(jsonPath("number").value(0));
@@ -111,10 +112,11 @@ public class CategoryControllerTest {
 	@Test
 	public void getCategoryRequest_returnsAnExistingCategory() throws Exception {
 		Category category = CategoryGenerator.generateCategory();
-		given(this.categoryQuery.getCategory(category.getId())).willReturn(category);
+		given(this.categoryQuery.getCategory(category.getId()))
+				.willReturn(Optional.of(category));
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/"+category.getId())
-				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("name").value(category.getName()));
 	}
@@ -122,10 +124,10 @@ public class CategoryControllerTest {
 	@Test
 	public void getNonExistingCategoryRequest_returnsHTTP404() throws Exception {
 		Long categoryId = CategoryGenerator.generateCategory().getId();
-		given(this.categoryQuery.getCategory(categoryId)).willReturn(null);
+		given(this.categoryQuery.getCategory(categoryId)).willReturn(Optional.empty());
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/"+categoryId)
-				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isNotFound());
 	}
 }

@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.renate.shop.exception.BadRequestException;
 import com.renate.shop.generator.UserGenerator;
@@ -91,27 +92,48 @@ public class UserQueryTest {
 	}
 
 	@Test
-	public void getUser_returnsGottenUser() {
+	public void getUserById_returnsGottenUser() {
 		User user = UserGenerator.generateUser();
-		given(this.userRepository.getOne(user.getId())).willReturn(user);
+		given(this.userRepository.findById(user.getId()))
+				.willReturn(Optional.of(user));
 
-		User gottenUser = this.userQuery.getUser(user.getId());
+		Optional<User> gottenUser = this.userQuery.getUser(user.getId());
+
+		assertThat(gottenUser.get()).isEqualTo(user);
+	}
+
+	@Test
+	public void getUserByUsername_returnsGottenUser() {
+		User user = UserGenerator.generateUser();
+		given(this.userRepository.findByUsername(user.getUsername())).willReturn(user);
+
+		User gottenUser = this.userQuery.getUser(user.getUsername());
 
 		assertThat(gottenUser).isEqualTo(user);
 	}
 
-	@Test
-	public void getNonExistingUser_returnsNull() {
-		User user = UserGenerator.generateUser();
-		given(this.userRepository.getOne(user.getId())).willReturn(null);
 
-		User gottenUser = this.userQuery.getUser(user.getId());
+	@Test
+	public void getNonExistingUserByUsername_returnsGottenUser() {
+		String username = UserGenerator.generateUser().getUsername();
+		given(this.userRepository.findByUsername(username)).willReturn(null);
+
+		User gottenUser = this.userQuery.getUser(username);
 
 		assertThat(gottenUser).isEqualTo(null);
 	}
+	@Test
+	public void getNonExistingUser_returnsNull() {
+		User user = UserGenerator.generateUser();
+		given(this.userRepository.findById(user.getId())).willReturn(Optional.empty());
+
+		Optional<User> gottenUser = this.userQuery.getUser(user.getId());
+
+		assertThat(gottenUser.isPresent()).isEqualTo(false);
+	}
 
 	@Test
-	public void getUserByUserName_returnsGottenUser() {
+	public void loadUserByUserName_returnsGottenUser() {
 		User user = UserGenerator.generateUser();
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		UserDetails userDetails = new org.springframework.security.core.userdetails

@@ -1,6 +1,7 @@
 package com.renate.shop.service.query.implementation;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.renate.shop.model.Category;
 import com.renate.shop.repository.CategoryRepository;
@@ -24,7 +25,7 @@ public class CategoryQueryImplementation implements CategoryQuery {
 	}
 
 	@Override
-	public Category getCategory(Long categoryId) {
-		return this.categoryRepository.getOne(categoryId);
+	public Optional<Category> getCategory(Long categoryId) {
+		return this.categoryRepository.findById(categoryId);
 	}
 }

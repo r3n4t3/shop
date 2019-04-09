@@ -1,5 +1,7 @@
 package com.renate.shop.controller;
 
+import java.util.Optional;
+
 import com.renate.shop.model.Transaction;
 import com.renate.shop.service.command.TransactionCommand;
 import com.renate.shop.service.query.TransactionQuery;
@@ -64,10 +66,10 @@ public class TransactionController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Transaction> getTransaction(@PathVariable("transId")Long id) {
-		Transaction transaction = this.transactionQuery.getTransaction(id);
-		if (transaction == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		Optional<Transaction> transaction = this.transactionQuery.getTransaction(id);
+		if (transaction.isPresent()) {
+			return new ResponseEntity<>(transaction.get(), HttpStatus.OK);
 		}
-		return new ResponseEntity<>(transaction, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

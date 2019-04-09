@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.renate.shop.generator.JSONConvertor;
 import com.renate.shop.generator.TransactionGenerator;
@@ -111,7 +112,8 @@ public class TransactionControllerTest {
 	@Test
 	public void getTransactionRequest_returnsHTTP200AndExistingTransaction() throws Exception {
 		Transaction transaction = TransactionGenerator.generateTransaction();
-		given(this.transactionQuery.getTransaction(transaction.getId())).willReturn(transaction);
+		given(this.transactionQuery.getTransaction(transaction.getId()))
+				.willReturn(Optional.of(transaction));
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions/" + transaction.getId())
 				.accept(MediaType.APPLICATION_JSON_VALUE))
@@ -122,7 +124,7 @@ public class TransactionControllerTest {
 	@Test
 	public void getNonExistingTransactionRequest_returnsHTTP404() throws Exception {
 		Long transId = TransactionGenerator.generateTransaction().getId();
-		given(this.transactionQuery.getTransaction(transId)).willReturn(null);
+		given(this.transactionQuery.getTransaction(transId)).willReturn(Optional.empty());
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions/" + transId)
 				.accept(MediaType.APPLICATION_JSON_VALUE))

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import com.renate.shop.generator.CustomerGenerator;
@@ -116,7 +117,8 @@ public class CustomerControllerTest {
 	@Test
 	public void getCustomerRequest_returnsHTTP200AndACustomer() throws Exception {
 		Customer customer = CustomerGenerator.generateCustomer();
-		given(this.customerQuery.getCustomer(customer.getId())).willReturn(customer);
+		given(this.customerQuery.getCustomer(customer.getId()))
+				.willReturn(Optional.of(customer));
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/" + customer.getId())
 				.accept(MediaType.APPLICATION_JSON_VALUE))
@@ -128,7 +130,7 @@ public class CustomerControllerTest {
 	@Test
 	public void getNonExistingCustomerRequest_returnsHTTP404() throws Exception {
 		Long customerId = new Random().nextLong();
-		given(this.customerQuery.getCustomer(customerId)).willReturn(null);
+		given(this.customerQuery.getCustomer(customerId)).willReturn(Optional.empty());
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/" + customerId)
 				.accept(MediaType.APPLICATION_JSON_VALUE))

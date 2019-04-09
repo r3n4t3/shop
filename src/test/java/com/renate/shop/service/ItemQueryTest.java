@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.renate.shop.exception.BadRequestException;
 import com.renate.shop.generator.ItemGenerator;
@@ -80,20 +81,21 @@ public class ItemQueryTest {
 	@Test
 	public void getItem_returnsExistingItem() {
 		Item item = ItemGenerator.generateItem();
-		given(this.itemRepository.getOne(item.getId())).willReturn(item);
+		given(this.itemRepository.findById(item.getId()))
+				.willReturn(Optional.of(item));
 
-		Item gottenItem = this.itemQuery.getItem(item.getId());
+		Optional<Item> gottenItem = this.itemQuery.getItem(item.getId());
 
-		assertThat(gottenItem).isEqualTo(item);
+		assertThat(gottenItem.get()).isEqualTo(item);
 	}
 
 	@Test
 	public void getItem_returnsNull() {
 		Item item = ItemGenerator.generateItem();
-		given(this.itemRepository.getOne(item.getId())).willReturn(null);
+		given(this.itemRepository.findById(item.getId())).willReturn(Optional.empty());
 
-		Item gottenItem = this.itemQuery.getItem(item.getId());
+		Optional<Item> gottenItem = this.itemQuery.getItem(item.getId());
 
-		assertThat(gottenItem).isEqualTo(null);
+		assertThat(gottenItem.isPresent()).isEqualTo(false);
 	}
 }

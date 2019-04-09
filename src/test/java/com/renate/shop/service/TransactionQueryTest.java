@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.renate.shop.exception.BadRequestException;
 import com.renate.shop.generator.TransactionGenerator;
@@ -80,20 +81,21 @@ public class TransactionQueryTest {
 	@Test
 	public void getTransaction_returnsAnExistingTransaction() {
 		Transaction transaction = TransactionGenerator.generateTransaction();
-		given(transactionRepository.getOne(transaction.getId())).willReturn(transaction);
+		given(transactionRepository.findById(transaction.getId()))
+				.willReturn(Optional.of(transaction));
 
-		Transaction gottenTransaction = this.transactionQuery.getTransaction(transaction.getId());
+		Optional<Transaction> gottenTransaction = this.transactionQuery.getTransaction(transaction.getId());
 
-		assertThat(gottenTransaction).isEqualTo(transaction);
+		assertThat(gottenTransaction.get()).isEqualTo(transaction);
 	}
 
 	@Test
 	public void getTransaction_returnsNull() {
 		Transaction transaction = TransactionGenerator.generateTransaction();
-		given(transactionRepository.getOne(transaction.getId())).willReturn(null);
+		given(transactionRepository.findById(transaction.getId())).willReturn(Optional.empty());
 
-		Transaction gottenTransaction = this.transactionQuery.getTransaction(transaction.getId());
+		Optional<Transaction> gottenTransaction = this.transactionQuery.getTransaction(transaction.getId());
 
-		assertThat(gottenTransaction).isEqualTo(null);
+		assertThat(gottenTransaction.isPresent()).isEqualTo(false);
 	}
 }

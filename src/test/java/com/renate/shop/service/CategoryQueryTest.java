@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.renate.shop.exception.BadRequestException;
 import com.renate.shop.generator.CategoryGenerator;
@@ -83,20 +84,22 @@ public class CategoryQueryTest {
 	@Test
 	public void getCategory_returnsExistingCategory() {
 		Category category = CategoryGenerator.generateCategory();
-		given(this.categoryRepository.getOne(category.getId())).willReturn(category);
+		given(this.categoryRepository.findById(category.getId()))
+				.willReturn(Optional.of(category));
 
-		Category gottenCategory = this.categoryQuery.getCategory(category.getId());
+		Optional<Category> gottenCategory = this.categoryQuery.getCategory(category.getId());
 
-		assertThat(gottenCategory).isEqualTo(category);
+		assertThat(gottenCategory.get()).isEqualTo(category);
 	}
 
 	@Test
 	public void getCategory_returnsNull() {
 		Category category = CategoryGenerator.generateCategory();
-		given(this.categoryRepository.getOne(category.getId())).willReturn(null);
+		given(this.categoryRepository.findById(category.getId()))
+				.willReturn(Optional.empty());
 
-		Category gottenCategory = this.categoryQuery.getCategory(category.getId());
+		Optional<Category> gottenCategory = this.categoryQuery.getCategory(category.getId());
 
-		assertThat(gottenCategory).isEqualTo(null);
+		assertThat(gottenCategory.isPresent()).isEqualTo(false);
 	}
 }

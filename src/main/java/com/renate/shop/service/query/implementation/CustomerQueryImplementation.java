@@ -1,6 +1,7 @@
 package com.renate.shop.service.query.implementation;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.renate.shop.model.Customer;
 import com.renate.shop.repository.CustomerRepository;
@@ -24,7 +25,7 @@ public class CustomerQueryImplementation implements CustomerQuery {
 	}
 
 	@Override
-	public Customer getCustomer(Long customerId) {
-		return this.customerRepository.getOne(customerId);
+	public Optional<Customer> getCustomer(Long customerId) {
+		return this.customerRepository.findById(customerId);
 	}
 }
