@@ -1,4 +1,4 @@
-package com.renate.shop.service;
+package com.renate.shop.unitTest.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;

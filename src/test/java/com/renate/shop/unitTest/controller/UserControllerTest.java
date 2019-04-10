@@ -1,4 +1,4 @@
-package com.renate.shop.controller;
+package com.renate.shop.unitTest.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.renate.shop.controller.UserController;
 import com.renate.shop.generator.JSONConvertor;
 import com.renate.shop.generator.UserGenerator;
 import com.renate.shop.model.User;

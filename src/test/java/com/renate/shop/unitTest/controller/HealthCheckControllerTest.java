@@ -1,7 +1,8 @@
-package com.renate.shop.controller;
+package com.renate.shop.unitTest.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.renate.shop.controller.HealthCheckController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
