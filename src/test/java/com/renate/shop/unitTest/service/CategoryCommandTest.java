@@ -3,6 +3,8 @@ package com.renate.shop.unitTest.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Optional;
+
 import com.renate.shop.exception.ConflictException;
 import com.renate.shop.exception.NotFoundException;
 import com.renate.shop.generator.CategoryGenerator;
@@ -58,19 +60,19 @@ public class CategoryCommandTest {
 
 	@Test
 	public void updateCategory_returnsUpdatedCategory() {
-		Category category = CategoryGenerator.generateCategory();
-		given(this.categoryRepository.save(category)).willReturn(category);
-		given(this.categoryRepository.getOne(category.getId())).willReturn(category);
+		Optional<Category> category = Optional.of(CategoryGenerator.generateCategory());
+		given(this.categoryRepository.save(category.get())).willReturn(category.get());
+		given(this.categoryRepository.findById(category.get().getId())).willReturn(category);
 
-		Category updatedCategory = this.categoryCommand.updateCategory(category);
+		Category updatedCategory = this.categoryCommand.updateCategory(category.get());
 
-		assertThat(updatedCategory).isEqualTo(category);
+		assertThat(updatedCategory).isEqualTo(category.get());
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void updateCategoryWithNonExistingCategory_throwsNotFoundException() {
 		Category category = CategoryGenerator.generateCategory();
-		given(this.categoryRepository.getOne(category.getId())).willReturn(null);
+		given(this.categoryRepository.findById(category.getId())).willReturn(Optional.empty());
 		given(this.categoryRepository.save(category)).willReturn(category);
 
 		this.categoryCommand.updateCategory(category);

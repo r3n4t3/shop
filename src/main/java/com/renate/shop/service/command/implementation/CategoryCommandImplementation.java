@@ -25,7 +25,7 @@ public class CategoryCommandImplementation implements CategoryCommand {
 
 	@Override
 	public Category updateCategory(Category category) {
-		if (this.categoryRepository.getOne(category.getId()) != null) {
+		if (this.categoryRepository.findById(category.getId()).isPresent()) {
 			return this.categoryRepository.save(category);
 		}
 		throw NotFoundException.create("Category does not exist");

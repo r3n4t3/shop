@@ -24,7 +24,7 @@ public class ItemCommandImplementation implements ItemCommand {
 
 	@Override
 	public Item updateItem(Item item) {
-		if (this.itemRepository.getOne(item.getId()) != null) {
+		if (this.itemRepository.findById(item.getId()).isPresent()) {
 			return this.itemRepository.save(item);
 		}
 		throw NotFoundException.create("Bad Request: Item does not exist");
